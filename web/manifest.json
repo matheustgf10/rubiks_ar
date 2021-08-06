@@ -1,6 +1,6 @@
 {
-    "name": "rubiks_ar",
-    "short_name": "rubiks_ar",
+    "name": "test_ar",
+    "short_name": "test_ar",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

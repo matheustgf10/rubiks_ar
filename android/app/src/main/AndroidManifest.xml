@@ -1,7 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.rubiks_ar">
+    package="com.example.test_ar">
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- Limits app visibility in the Google Play Store to ARCore supported devices
+     (https://developers.google.com/ar/devices). -->
+    <uses-feature android:name="android.hardware.camera.ar" />
+
    <application
-        android:label="rubiks_ar"
+        android:label="test_ar"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
@@ -18,6 +24,12 @@
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
               />
+
+            <!-- "AR Required" app, requires "Google Play Services for AR" (ARCore)
+                to be installed, as the app does not include any non-AR features. -->
+            <meta-data android:name="com.google.ar.core" android:value="required" />
+
+
             <!-- Displays an Android View that continues showing the launch screen
                  Drawable until Flutter paints its first frame, then this splash
                  screen fades out. A splash screen is useful to avoid any visual

@@ -1,4 +1,4 @@
-package com.example.rubiks_ar
+package com.example.test_ar
 
 import io.flutter.embedding.android.FlutterActivity
 

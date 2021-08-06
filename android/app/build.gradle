@@ -34,8 +34,8 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.rubiks_ar"
-        minSdkVersion 16
+        applicationId "com.example.test_ar"
+        minSdkVersion 24
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -48,6 +48,13 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    // Sceneform libraries use language constructs from Java 8.
+    // Add these compile options if targeting minSdkVersion < 26.
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
 }
 
 flutter {
@@ -56,4 +63,12 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.google.ar:core:1.25.0'
+    
+    // Provides ArFragment, and other UX resources.
+    implementation 'com.google.ar.sceneform.ux:sceneform-ux:1.8.0'
+
+    // Alternatively, use ArSceneView without the UX dependency.
+    implementation 'com.google.ar.sceneform:core:1.8.0'
+
 }
