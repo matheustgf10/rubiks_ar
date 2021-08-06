@@ -53,6 +53,7 @@ flutter:
     - assets/images/icon.png
     - assets/images/rubiks3x3x3.png
     - assets/images/rubiks2x2x2.png
+    - assets/images/loading.gif
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
