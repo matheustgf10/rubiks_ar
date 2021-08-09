@@ -30,59 +30,74 @@ class _LocalObjectWidgetState extends State<LocalObjectWidget> {
     return Scaffold(
       appBar: AppBar(title: const Text('Local Object (Cube)')),
       body: Container(
-        child: Stack(
-          children: [
-            ARView(
-              onARViewCreated: onARViewCreated,
-              planeDetectionConfig: PlaneDetectionConfig.horizontalAndVertical,
-            ),
-            Align(
-              alignment: FractionalOffset.bottomCenter,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton(
-                        onPressed: onLocalObjectAtOriginButtonPressed,
-                        child: Text("Adicionar/Remover \nObjeto à origem"),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton(
-                        onPressed: onLocalObjectShuffleButtonPressed,
-                        child: Text("Objeto aleatório"),
-                      ),
-                    ],
-                  )
-                ],
+        child: GestureDetector(
+          onHorizontalDragEnd: (dragEndDetails) {
+            var snackBar;
+
+            if (dragEndDetails.velocity.pixelsPerSecond.dx > -1000) {
+              _rotateRubiksToRight();
+
+              snackBar = SnackBar(
+                content: Text('Arrastando para a Direita'),
+                duration: Duration(seconds: 1),
+                action: SnackBarAction(
+                  label: 'Remover',
+                  onPressed: () {
+                    // Navigator.pop(context);
+                  },
+                ),
+              );
+            } else {
+              _rotateRubiksToLeft();
+              snackBar = SnackBar(
+                content: Text('Arrastando para a Esqueda'),
+                duration: Duration(seconds: 1),
+                action: SnackBarAction(
+                  label: 'Remover',
+                  onPressed: () {
+                    // Navigator.pop(context);
+                  },
+                ),
+              );
+            }
+
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          },
+          child: Stack(
+            children: [
+              ARView(
+                onARViewCreated: onARViewCreated,
+                planeDetectionConfig:
+                    PlaneDetectionConfig.horizontalAndVertical,
               ),
-            ),
-            Align(
-              alignment: FractionalOffset.bottomLeft,
-              child: Column(
-                children: [
-                  ElevatedButton(
-                      onPressed: () {}, child: Icon(Icons.arrow_upward)),
-                  Row(
-                    children: [
-                      ElevatedButton(
-                          onPressed: _rotateRubiksToLeft,
-                          child: Icon(Icons.arrow_left)),
-                      ElevatedButton(
-                          onPressed: () {}, child: Icon(Icons.arrow_downward)),
-                      ElevatedButton(
-                          onPressed: () {}, child: Icon(Icons.arrow_right)),
-                    ],
-                  ),
-                ],
+              Align(
+                alignment: FractionalOffset.bottomCenter,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                          onPressed: onLocalObjectAtOriginButtonPressed,
+                          child: Text("Adicionar/Remover Cubo"),
+                        ),
+                      ],
+                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    //   children: [
+                    //     ElevatedButton(
+                    //       onPressed: onLocalObjectShuffleButtonPressed,
+                    //       child: Text("Objeto aleatório"),
+                    //     ),
+                    //   ],
+                    // )
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -124,16 +139,17 @@ class _LocalObjectWidgetState extends State<LocalObjectWidget> {
     }
   }
 
-  Future<void> onLocalObjectShuffleButtonPressed() async {
+  Future<void> _rotateRubiksToLeft() async {
     if (this.localObjectNode != null) {
-      var newScale = Random().nextDouble() / 5;
+      var newScale = Vector3(0.05, 0.05, 0.05);
       var newTranslationAxis = Random().nextInt(3);
       var newTranslationAmount = Random().nextDouble() / 3;
-      var newTranslation = Vector3(0, 0, 0);
+      var newTranslation = Vector3(1, 0, 0);
       newTranslation[newTranslationAxis] = newTranslationAmount;
       var newRotationAxisIndex = Random().nextInt(3);
       var newRotationAmount = Random().nextDouble();
-      var newRotationAxis = Vector3(0, 0, 0);
+      var newRotationAxis = Vector3(1, 0, 0);
+
       newRotationAxis[newRotationAxisIndex] = 1.0;
 
       final newTransform = Matrix4.identity();
@@ -146,21 +162,25 @@ class _LocalObjectWidgetState extends State<LocalObjectWidget> {
     }
   }
 
-  Future<void> _rotateRubiksToLeft() async {
+  Future<void> _rotateRubiksToRight() async {
     if (this.localObjectNode != null) {
-      var newScale = Random().nextDouble() / 5;
+      var newScale = Vector3(0.05, 0.05, 0.05);
       var newTranslationAxis = Random().nextInt(3);
       var newTranslationAmount = Random().nextDouble() / 3;
-      var newTranslation = Vector3(0, 0, 0);
+      var newTranslation = Vector3(0, 1, 0);
       newTranslation[newTranslationAxis] = newTranslationAmount;
       var newRotationAxisIndex = Random().nextInt(3);
       var newRotationAmount = Random().nextDouble();
-      var newRotationAxis = Vector3(1, 1, 1);
+      var newRotationAxis = Vector3(0, 0, 0);
 
       newRotationAxis[newRotationAxisIndex] = 1.0;
+      this.localObjectNode!.transform.rotateY(10);
 
       final newTransform = Matrix4.identity();
+
+      newTransform.setTranslation(newTranslation);
       newTransform.rotate(newRotationAxis, newRotationAmount);
+      newTransform.scale(newScale);
 
       this.localObjectNode!.transform = newTransform;
     }

@@ -1,7 +1,6 @@
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:test_ar/debug_options_widget.dart';
 import 'package:test_ar/local_object_widget.dart';
-import 'package:test_ar/objects_on_planes_widget.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +17,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Rubik\'s Cube'),
+      home: AnimatedSplashScreen(
+        splashIconSize: 300,
+        splash: 'assets/images/loading2.gif',
+        nextScreen: MyHomePage(title: 'Flutter Rubik\'s Cube'),
+        splashTransition: SplashTransition.rotationTransition,
+        duration: 4300,
+      ),
     );
   }
 }
@@ -49,30 +54,33 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      body: Center(
-        child: Container(
-          color: Colors.black87,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return Center(
             child: Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'CUBOS',
-                      style: TextStyle(color: Colors.white, fontSize: 24),
-                    ),
+              color: Colors.black87,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'CUBOS',
+                          style: TextStyle(color: Colors.white, fontSize: 24),
+                        ),
+                      ),
+                      Expanded(child: ExampleList()),
+                    ],
                   ),
-                  Expanded(
-                    child: ExampleList(),
-                  )
-                ],
+                ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
@@ -125,7 +133,7 @@ class ExampleList extends StatelessWidget {
           () => Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => LocalObjectWidget(cube: '2x2x2')))),
+                  builder: (context) => LocalObjectWidget(cube: '3x3x3')))),
     ];
     return Container(
       width: MediaQuery.of(context).size.width - 1,
