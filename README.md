@@ -1,4 +1,4 @@
-# test_ar
+# rubiks_ar
 
 A new Flutter project.
 
